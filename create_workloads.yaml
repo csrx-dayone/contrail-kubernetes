@@ -1,0 +1,179 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: ssh
+ labels:
+  run: ssh
+ namespace: hbf
+spec:
+ type: NodePort
+ ports:
+ - port: 32311
+   targetPort: 22
+   protocol: TCP
+ selector:
+  run: ssh
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ssh01
+ labels:
+  run: ssh01
+ namespace: hbf
+spec:
+ type: NodePort
+ ports:
+ - port: 32312
+   targetPort: 22
+   protocol: TCP
+ selector:
+  run: ssh01
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ssh02
+ labels:
+  run: ssh02
+ namespace: hbf
+spec:
+ type: NodePort
+ ports:
+ - port: 32313
+   targetPort: 22
+   protocol: TCP
+ selector:
+  run: ssh02
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ssh03
+ labels:
+  run: ssh03
+ namespace: hbf
+spec:
+ type: NodePort
+ ports:
+ - port: 32314
+   targetPort: 22
+   protocol: TCP
+ selector:
+  run: ssh03
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: net01
+  namespace: hbf
+  annotations:
+    opencontrail.org/cidr: "11.1.1.0/24"
+spec:
+  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: net02
+  namespace: hbf
+  annotations:
+    opencontrail.org/cidr: "21.1.1.0/24"
+spec:
+  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: net03
+  namespace: hbf
+  annotations:
+    opencontrail.org/cidr: "31.1.1.0/24"
+spec:
+  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: net04
+  namespace: hbf
+  annotations:
+    opencontrail.org/cidr: "41.1.1.0/24"
+spec:
+  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app01
+  labels:
+    run: ssh
+  namespace: hbf
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[ { "name": "net01" } ]'
+spec:
+  nodeName: worker1
+  containers:
+  - image: manasasuresh/ubuntu-wget-nginx:latest
+    imagePullPolicy: IfNotPresent
+    name: net01
+    command: ["/bin/bash","-c","ip route add 21.1.1.0/24 dev eth1;ip route add 31.1.1.0/24 dev eth1;ip route add 41.1.1.0/24 dev eth1;service nginx start;while true; do sleep 1000;done"]
+    securityContext:
+      privileged: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app02
+  labels:
+    run: ssh01
+  namespace: hbf
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[ { "name": "net02" } ]'
+spec:
+  nodeName: worker1
+  containers:
+  - image: manasasuresh/ubuntu-wget-nginx:latest
+    imagePullPolicy: IfNotPresent
+    name: net02
+    command: ["/bin/bash","-c","ip route add 11.1.1.0/24 dev eth1;ip route add 31.1.1.0/24 dev eth1;ip route add 41.1.1.0/24 dev eth1;service nginx start;while true; do sleep 1000;done"]
+    securityContext:
+      privileged: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: media-app01
+  labels:
+    run: ssh02
+  namespace: hbf
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[ { "name": "net03" } ]'
+spec:
+  nodeName: worker2
+  containers:
+  - image: manasasuresh/ubuntu-wget-nginx:latest
+    imagePullPolicy: IfNotPresent
+    name: net03
+    command: ["/bin/bash","-c","ip route add 11.1.1.0/24 dev eth1;ip route add 21.1.1.0/24 dev eth1;ip route add 41.1.1.0/24 dev eth1;service nginx start;while true; do sleep 1000;done"]
+    securityContext:
+      privileged: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: media-app02
+  labels:
+    run: ssh03
+  namespace: hbf
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[ { "name": "net04" } ]'
+spec:
+  nodeName: worker2
+  containers:
+  - image: manasasuresh/ubuntu-wget-nginx:latest
+    imagePullPolicy: IfNotPresent
+    name: net04
+    command: ["/bin/bash","-c","ip route add 11.1.1.0/24 dev eth1;ip route add 21.1.1.0/24 dev eth1;ip route add 31.1.1.0/24 dev eth1;service nginx start;while true; do sleep 1000;done"]
+    securityContext:
+      privileged: true
