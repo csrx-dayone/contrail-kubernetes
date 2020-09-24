@@ -1,0 +1,53 @@
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  annotations:
+    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbs", "name":"__hbs-hbf-left__"}'
+  name: left
+  namespace: hbf
+spec:
+  config: '{"cniVersion":"0.3.0", "type": "contrail-k8s-cni" }'
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  annotations:
+    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbs", "name":"__hbs-hbf-right__"}'
+  name: right
+  namespace: hbf
+spec:
+  config: '{"cniVersion":"0.3.0", "type": "contrail-k8s-cni" }'
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    type: hbf
+  name: hbf
+  namespace: hbf
+spec:
+  selector:
+    matchLabels:
+      type: hbf
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[{"name":"left"}, {"name":"right"}]'
+      labels:
+        type: hbf
+    spec:
+      containers:
+      - env:
+        - name: CSRX_FORWARD_MODE
+          value: wire
+        image: csrx:20.2R1.10
+        imagePullPolicy: IfNotPresent
+        name: csrx
+        securityContext:
+          privileged: true
+        stdin: true
+        tty: false
+      nodeSelector:
+        type: hbf
+      restartPolicy: Always
+

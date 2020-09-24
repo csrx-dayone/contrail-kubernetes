@@ -1,0 +1,47 @@
+#config/instances.yaml
+deployment:
+    orchestrator: kubernetes
+    deployer: contrail-ansible-deployer
+provider_config:
+  bms:
+    ssh_pwd: <password>
+    ssh_user: <username>
+    ntpserver: 8.8.8.8
+    domainsuffix: local
+instances:
+  server1:
+    provider: bms
+    ip: <Server IP>
+    roles:
+      config_database:
+      config:
+      control:
+      analytics_database:
+      analytics:
+      webui:
+      k8s_master:
+      kubemanager:
+  server2:
+    provider: bms
+    ip: <Server IP>
+    roles:
+      k8s_node:
+      vrouter:
+  server3:
+    provider: bms
+    ip: <Server IP>
+    roles:
+      k8s_node:
+      vrouter:
+global_configuration:
+  CONTAINER_REGISTRY: opencontrailnightly
+  REGISTRY_PRIVATE_INSECURE: True
+contrail_configuration:
+  CONTAINER_REGISTRY: opencontrailnightly
+  CONTROLLER_NODES: <Server IP>
+  CONTRAIL_VERSION: master-latest
+  CLOUD_ORCHESTRATOR: kubernetes
+  KUBERNETES_CLUSTER_PROJECT: {}
+  CONFIG_NODEMGR__DEFAULTS__minimum_diskGB: 20
+  DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 20
+  CONFIG_DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 20
