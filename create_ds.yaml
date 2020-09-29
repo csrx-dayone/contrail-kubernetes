@@ -2,7 +2,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   annotations:
-    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbs", "name":"__hbs-hbf-left__"}'
+    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbf", "name":"__hbs-hbf-left__"}'
   name: left
   namespace: hbf
 spec:
@@ -12,7 +12,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   annotations:
-    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbs", "name":"__hbs-hbf-right__"}'
+    opencontrail.org/network: '{"domain":"default-domain", "project":"k8s-hbf", "name":"__hbs-hbf-right__"}'
   name: right
   namespace: hbf
 spec:
