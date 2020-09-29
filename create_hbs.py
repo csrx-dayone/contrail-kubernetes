@@ -12,7 +12,7 @@ from vnc_api.exceptions import NoIdError
 from vnc_api.gen.resource_xsd import QuotaType
 
 hbs_name = 'hbs'
-project_name = 'k8s-hbs'
+project_name = 'k8s-hbf'
 admin_user = 'admin'
 admin_password = 'contrail123'
 admin_project = 'admin'
