@@ -70,7 +70,7 @@ metadata:
   annotations:
     opencontrail.org/cidr: "11.1.1.0/24"
 spec:
-  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+  config: '{ "cniVersion": "0.3.0", "type": "contrail-k8s-cni" }'
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -80,7 +80,7 @@ metadata:
   annotations:
     opencontrail.org/cidr: "21.1.1.0/24"
 spec:
-  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+  config: '{ "cniVersion": "0.3.0", "type": "contrail-k8s-cni" }'
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -90,7 +90,7 @@ metadata:
   annotations:
     opencontrail.org/cidr: "31.1.1.0/24"
 spec:
-  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+  config: '{ "cniVersion": "0.3.0", "type": "contrail-k8s-cni" }'
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -100,7 +100,7 @@ metadata:
   annotations:
     opencontrail.org/cidr: "41.1.1.0/24"
 spec:
-  config: '{ cniVersion: "0.3.0", type: "contrail-k8s-cni" }'
+  config: '{ "cniVersion": "0.3.0", "type": "contrail-k8s-cni" }'
 ---
 apiVersion: v1
 kind: Pod
